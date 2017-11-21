@@ -1,25 +1,23 @@
 (def global-conf
   {:source-paths #{"src"}
    :dependencies '[[org.clojure/clojure "1.8.0"]
-                   [adzerk/boot-cljs "2.1.0" :scope "test"]
-                   [powerlaces/boot-figreload "0.5.13"]
+                   [org.clojure/clojurescript "1.9.946"]
 
-                   [pandeiro/boot-http "0.7.6" :scope "test"]
-                   [crisptrutski/boot-cljs-test "0.2.2" :scope "test"]
+                   [adzerk/boot-cljs "2.1.0" :scope "test"]
+                   [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                    [binaryage/dirac "RELEASE" :scope "test"]
                    [binaryage/devtools "RELEASE" :scope "test"]
-                   [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
-
-                   [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                    [com.cemerick/piggieback "0.2.1" :scope "test"]
-                   [weasel "0.7.0" :scope "test"]
+                   [crisptrutski/boot-cljs-test "0.2.2" :scope "test"]
                    [org.clojure/tools.nrepl "0.2.13" :scope "test"]
+                   [powerlaces/boot-figreload "0.5.13"]
+                   [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
+                   [pandeiro/boot-http "0.7.6" :scope "test"]
                    [sparkfund/boot-lein-generate "0.3.0" :scope "test"]
+                   [weasel "0.7.0" :scope "test"]
 
-                   ;; App deps
-                   [org.clojure/clojurescript "1.9.946"]
+                   ; browser
                    [prismatic/dommy "1.1.0" :scope "test"]
-
 
                    ; node
                    [funcool/bide "1.6.0"]
