@@ -20,7 +20,7 @@
                  [org.clojure/clojurescript "1.9.562"  :scope "test"]
                  [prismatic/dommy "1.1.0" :scope "test"]])
 
-(task-options! pom {:project "figreload-demo"
+(task-options! pom {:project "foo"
                     :version "0.1.0-SNAPSHOT"
                     :url "https://github.com/arichiardi/figreload-demo"
                     :description "A sample project for trying lein-figwheel integration in boot-reload."
@@ -46,6 +46,7 @@
         (test-cljs)))
 
 (deftask dev [D with-dirac bool "Enable Dirac Devtools."]
+  (merge-env! :source-paths #{"src-browser"})
   (comp (serve :dir "assets/")
         (watch)
         (notify)

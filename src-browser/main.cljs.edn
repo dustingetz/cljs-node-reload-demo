@@ -1,0 +1,2 @@
+{:require  [foo.main]
+ :boot-reload {:on-jsload foo.main/on-js-reload}}

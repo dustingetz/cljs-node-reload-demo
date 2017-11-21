@@ -1,0 +1,2 @@
+(ns foo.main
+  (:require))
