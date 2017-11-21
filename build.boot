@@ -1,6 +1,5 @@
 (def global-conf
   {:source-paths #{"src"}
-   :resource-paths #{"assets"}
    :dependencies '[[org.clojure/clojure "1.8.0"]
                    [adzerk/boot-cljs "2.1.0" :scope "test"]
                    [powerlaces/boot-figreload "0.1.1-SNAPSHOT" :scope "test"]
@@ -54,20 +53,23 @@
                (test-cljs)))
 
 (deftask node []
-         (merge-env! :source-paths #{"src-node"})
-         identity)
-
-(deftask browser []
-         (merge-env! :source-paths #{"src-browser"})
-         identity)
-
-(deftask dev [D with-dirac bool "Enable Dirac Devtools."]
-         (comp (serve :dir "target")
+         (merge-env! :source-paths #{"src-node"}
+                     :resource-paths #{"resources-node"})
+         (comp (serve :dir "target/node")
                (watch)
                (notify)
                (cljs-devtools)
-               (reload :client-opts {:debug true}
-                       :asset-path "/public")               ;; Deprecated
+               (reload :client-opts {:debug true} :asset-path "/public") ; Deprecated
+               (target :dir #{"target/node"})))
+
+(deftask browser [D with-dirac bool "Enable Dirac Devtools."]
+         (merge-env! :source-paths #{"src-browser"}
+                     :resource-paths #{"resources-browser"})
+         (comp (serve :dir "target/browser")
+               (watch)
+               (notify)
+               (cljs-devtools)
+               (reload :client-opts {:debug true} :asset-path "/public") ; Deprecated
                (if-not with-dirac
                  (cljs-repl)
                  (dirac))
@@ -76,16 +78,12 @@
                       {:devtools/config {:features-to-install [:formatters :hints]
                                          :fn-symbol "λ"
                                          :print-config-overrides true}}})
-               (target :dir #{"target"})))
+               (target :dir #{"target/browser"})))
 
 (deftask test []
          (comp (testing)
                (test-cljs)
                (exit!)))
-
-(deftask build-dev []
-         (cljs :optimizations :none
-               :source-map true))
 
 (when (> (.lastModified (clojure.java.io/file "build.boot"))
          (.lastModified (clojure.java.io/file "project.clj")))
