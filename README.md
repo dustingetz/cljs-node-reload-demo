@@ -2,8 +2,10 @@ This is an attempt to see node hot code reloading work with boot figreload.
 
 It doesn't work right now in this project.
 
-Node- http://localhost:3000
+Node- http://localhost:3000 (ExpressJS server with npm deps)
 
+    brew install yarn
+    pushd resources-node; yarn; popd
     boot node
     cd target/node; node preamble.js # in second terminal
 
