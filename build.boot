@@ -51,22 +51,11 @@
          '[pandeiro.boot-http :refer [serve]]
          'boot.lein)
 
-(deftask testing []
-         (merge-env! :resource-paths #{"test"})
-         identity)
-
-(deftask auto-test []
-         (comp (testing)
-               (watch)
-               (speak)
-               (test-cljs)))
-
 (deftask node []
          (merge-env! :source-paths #{"src-node"}
                      :resource-paths #{"resources-node"})
          (comp (watch)
                (notify)
-               (cljs-devtools)
                (reload :client-opts {:debug true} :asset-path "/public") ; Deprecated
                (cljs)
                (target :dir #{"target/node"})))
@@ -77,18 +66,10 @@
          (comp (serve :dir "target/browser")
                (watch)
                (notify)
-               (cljs-devtools)
                (reload :client-opts {:debug true} :asset-path "/public") ; Deprecated
-               (if-not with-dirac
-                 (cljs-repl)
-                 (dirac))
+               (cljs-repl)
                (cljs)
                (target :dir #{"target/browser"})))
-
-(deftask test []
-         (comp (testing)
-               (test-cljs)
-               (exit!)))
 
 (when (> (.lastModified (clojure.java.io/file "build.boot"))
          (.lastModified (clojure.java.io/file "project.clj")))
