@@ -1,5 +1,4 @@
 {:require [foo.main]
- :init-fns []
  :compiler-options
  {:optimizations :none
   :pretty-print true

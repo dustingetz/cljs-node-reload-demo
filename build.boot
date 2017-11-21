@@ -17,8 +17,17 @@
                    [sparkfund/boot-lein-generate "0.3.0" :scope "test"]
 
                    ;; App deps
-                   [org.clojure/clojurescript "1.9.562" :scope "test"]
-                   [prismatic/dommy "1.1.0" :scope "test"]]})
+                   [org.clojure/clojurescript "1.9.946"]
+                   [prismatic/dommy "1.1.0" :scope "test"]
+
+
+                   ; node
+                   [funcool/bide "1.6.0"]
+                   [funcool/cuerdas "2.0.4"]
+                   [funcool/cats "2.1.0"]
+                   [funcool/promesa "1.8.1"]
+
+                   ]})
 
 (apply set-env! (mapcat identity global-conf))
 (set-env!
@@ -55,11 +64,11 @@
 (deftask node []
          (merge-env! :source-paths #{"src-node"}
                      :resource-paths #{"resources-node"})
-         (comp (serve :dir "target/node")
-               (watch)
+         (comp (watch)
                (notify)
                (cljs-devtools)
                (reload :client-opts {:debug true} :asset-path "/public") ; Deprecated
+               (cljs)
                (target :dir #{"target/node"})))
 
 (deftask browser [D with-dirac bool "Enable Dirac Devtools."]
@@ -73,11 +82,7 @@
                (if-not with-dirac
                  (cljs-repl)
                  (dirac))
-               (cljs :compiler-options
-                     {:external-config
-                      {:devtools/config {:features-to-install [:formatters :hints]
-                                         :fn-symbol "λ"
-                                         :print-config-overrides true}}})
+               (cljs)
                (target :dir #{"target/browser"})))
 
 (deftask test []
