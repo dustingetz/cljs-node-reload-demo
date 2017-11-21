@@ -1,8 +1,10 @@
 {:require [foo.main]
+ :init-fns []
+ :boot-reload {:on-jsload foo.main/on-js-reload}
  :compiler-options
- {:optimizations :none
+ {:target :nodejs
+  :optimizations :none
   :pretty-print true
   :static-fns true
-  :target :nodejs
   :language-in :ecmascript5
   :source-map true}}

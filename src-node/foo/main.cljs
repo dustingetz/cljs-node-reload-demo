@@ -5,6 +5,9 @@
 
 (nodejs/enable-util-print!)
 
+(defn on-js-reload []
+  (js/console.info "Reloading Javascript..."))
+
 (defn main []
   (server/start))
 
