@@ -35,51 +35,58 @@
                               :url "http://unlicense.org/"
                               :distribution :repo}})
 
-(require '[adzerk.boot-cljs              :refer [cljs]]
-         '[adzerk.boot-cljs-repl         :refer [cljs-repl]]
-         '[powerlaces.boot-figreload     :refer [reload]]
-         '[crisptrutski.boot-cljs-test   :refer [exit! test-cljs]]
+(require '[adzerk.boot-cljs :refer [cljs]]
+         '[adzerk.boot-cljs-repl :refer [cljs-repl]]
+         '[powerlaces.boot-figreload :refer [reload]]
+         '[crisptrutski.boot-cljs-test :refer [exit! test-cljs]]
          '[powerlaces.boot-cljs-devtools :refer [dirac cljs-devtools]]
-         '[pandeiro.boot-http            :refer [serve]]
+         '[pandeiro.boot-http :refer [serve]]
          'boot.lein)
 
 (deftask testing []
-  (merge-env! :resource-paths #{"test"})
-  identity)
+         (merge-env! :resource-paths #{"test"})
+         identity)
 
 (deftask auto-test []
-  (comp (testing)
-        (watch)
-        (speak)
-        (test-cljs)))
+         (comp (testing)
+               (watch)
+               (speak)
+               (test-cljs)))
+
+(deftask node []
+         (merge-env! :source-paths #{"src-node"})
+         identity)
+
+(deftask browser []
+         (merge-env! :source-paths #{"src-browser"})
+         identity)
 
 (deftask dev [D with-dirac bool "Enable Dirac Devtools."]
-  (merge-env! :source-paths #{"src-browser"})
-  (comp (serve :dir "assets/")
-        (watch)
-        (notify)
-        (cljs-devtools)
-        (reload :client-opts {:debug true}
-                :asset-path "/public") ;; Deprecated
-        (if-not with-dirac
-          (cljs-repl)
-          (dirac))
-        (cljs :optimizations :none
-              :source-map true
-              :compiler-options {:external-config
-                                 {:devtools/config {:features-to-install [:formatters :hints]
-                                                    :fn-symbol "λ"
-                                                    :print-config-overrides true}}})))
+         (comp (serve :dir "target")
+               (watch)
+               (notify)
+               (cljs-devtools)
+               (reload :client-opts {:debug true}
+                       :asset-path "/public")               ;; Deprecated
+               (if-not with-dirac
+                 (cljs-repl)
+                 (dirac))
+               (cljs :compiler-options
+                     {:external-config
+                      {:devtools/config {:features-to-install [:formatters :hints]
+                                         :fn-symbol "λ"
+                                         :print-config-overrides true}}})
+               (target :dir #{"target"})))
 
 (deftask test []
-  (comp (testing)
-        (test-cljs)
-        (exit!)))
+         (comp (testing)
+               (test-cljs)
+               (exit!)))
 
 (deftask build-dev []
-  (cljs :optimizations :none
-        :source-map true))
+         (cljs :optimizations :none
+               :source-map true))
 
 (when (> (.lastModified (clojure.java.io/file "build.boot"))
          (.lastModified (clojure.java.io/file "project.clj")))
-      (boot.lein/write-project-clj))
+  (boot.lein/write-project-clj))

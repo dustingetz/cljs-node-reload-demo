@@ -1,0 +1,7 @@
+{:require  [foo.main]
+ :boot-reload {:on-jsload foo.main/on-js-reload}
+ :compiler-options
+ {:optimizations :none
+  :source-map true
+  :pretty-print true
+  :language-in :ecmascript5}}
